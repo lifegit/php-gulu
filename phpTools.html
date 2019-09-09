@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tools</title>
+</head>
+<body>
+    <textarea id="input" style="width: 1500px;height: 500px" ></textarea>
+    <div>
+        <button onclick="javascript:button_onclick0();" style="width: 100px;height: 50px" >empty</button>
+        <button onclick="javascript:button_onclick1();" style="width: 100px;height: 50px" >toKey</button>
+        <button onclick="javascript:button_onclick2();" style="width: 100px;height: 50px">toArray</button>    
+        <button onclick="javascript:button_onclick3();" style="width: 100px;height: 50px">toUppercase</button>  
+    </div>
+
+    <script>
+        function button_onclick0(){
+            document.getElementById("input").value = "";
+        }
+        function button_onclick1(){
+            res = '';
+            value = document.getElementById("input").value;
+            arr=value.split("\n");
+            for (i=0;i<arr.length ;i++ ) {
+                res += "const KEY_" + arr[i].toUpperCase() + " = '"+arr[i]+"';" + "\r\n";
+            }
+            document.getElementById("input").value = "\r\n//keys\r\n"+res;
+        }
+        function button_onclick2(){
+            res1 = '';
+            res2 = '';
+            res3 = '';
+            res4 = '';
+            res5 = '';
+            res6 = '';
+
+            value = document.getElementById("input").value;
+            arr=value.split(",");
+
+            //set
+            for (i=0;i<arr.length ;i++ ) {
+                res1 += "`"+arr[i]+"`=:"+arr[i]+",";
+            }
+            res1=res1.substr(0,res1.length-1);
+            
+            //base
+            for (i=0;i<arr.length ;i++ ) {
+                res2 += "':"+arr[i]+"'=>$"+arr[i]+",";
+            }
+            res2=res2.substr(0,res2.length-1);
+            //base
+            for (i=0;i<arr.length ;i++ ) {
+                res3 += "$"+arr[i]+" = $_POST['"+arr[i]+"'];\r\n";
+            }
+            //base
+            for (i=0;i<arr.length ;i++ ) {
+                res4 += "empty($_POST['"+arr[i]+"']) || ";
+            }
+            res4=res4.substr(0,res4.length-4);
+
+            //base
+            for (i=0;i<arr.length ;i++ ) {
+                res5 += "$"+arr[i]+",";
+            }
+            res5=res5.substr(0,res5.length-1);            
+            
+            //add
+            temp1 = ''
+            temp2 = ''
+            for (i=0;i<arr.length ;i++ ) {
+                temp1 += "`"+arr[i]+"`,";
+                temp2 += ":"+arr[i]+",";
+            }
+            temp1=temp1.substr(0,temp1.length-1);
+            temp2=temp2.substr(0,temp2.length-1);
+            res6="("+temp1+") VALUES ("+temp2+")";
+
+            document.getElementById("input").value = "//base\r\n"+res4 +"\r\n\r\n"+res3+"\r\n"+res5+"\r\n\r\n//set\r\n"+res1+"\r\n\r\n//add\r\n"+res6+"\r\n\r\n//base\r\n"+res2;
+        }
+        function button_onclick3(){
+            document.getElementById("input").value = document.getElementById("input").value.toUpperCase();
+        }
+    </script>
+</body>
+</html>
